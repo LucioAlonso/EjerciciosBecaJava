@@ -10,11 +10,11 @@ public class main {
 		romb1.dibujar();
 		System.out.println("=================");
 		
-		System.out.println("Size: " + romb1);
+		System.out.println("Size: " + romb2);
 		romb2.dibujar();
 		System.out.println("=================");
 		
-		System.out.println("Size: " + romb1);
+		System.out.println("Size: " + romb3);
 		romb3.dibujar();
 		System.out.println("=================");
 	}
