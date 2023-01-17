@@ -6,10 +6,15 @@ public class main {
 		Rombo romb2 = new Rombo(1);
 		Rombo romb3 = new Rombo();
 		
+		System.out.println("Size: " + romb1);
 		romb1.dibujar();
 		System.out.println("=================");
+		
+		System.out.println("Size: " + romb1);
 		romb2.dibujar();
 		System.out.println("=================");
+		
+		System.out.println("Size: " + romb1);
 		romb3.dibujar();
 		System.out.println("=================");
 	}
