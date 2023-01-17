@@ -13,21 +13,25 @@ public class Rombo {
 	}
 	
 	public Rombo(int min, int max) {
-		this.min = min;
-		this.max = max;
+		setSize(min, max);
+	}
+	
+	public void setSize(int min, int max) {
+		if(min == max) {
+			System.out.println("Los tamanos no pueden ser iguales.");
+		} else if(max < min) {
+			this.max = min;
+			this.min = max;
+		} else {
+			this.min = min;
+			this.max = max;
+		}
 	}
 	
 	public void dibujar() {
 		int blanco = 0;
-		
-		if(max < min) {
-			int aux = max;
-			max = min;
-			min = aux;
-		}
-		
 		int minCop = min;
-
+		//Primera mitad
 		while(minCop <= max) {
 				// blanco = max - minCop;
 				for(int i = 0; i < (max - minCop)/2; i++) {
@@ -44,7 +48,9 @@ public class Rombo {
 				System.out.println("");
 				minCop += 2;
 		}
+		
 		minCop -= 4;
+		//Segunda mitad
 		while(minCop >= min) {
 				blanco = max - minCop;
 				for(int i = 0; i < (max - minCop)/2; i++) {
