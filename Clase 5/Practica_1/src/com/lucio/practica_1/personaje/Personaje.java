@@ -2,6 +2,7 @@ package com.lucio.practica_1.personaje;
 
 import java.util.Iterator;
 
+
 public class Personaje {
 	private int vida, ataque, defensa, velocidad;
 	private String nombre;
@@ -15,12 +16,12 @@ public class Personaje {
 	}
 	
 	public void luchar(Personaje enemigo) {
-		System.out.println("++++++ "+ this.getNombre() + " VS " + enemigo.getNombre() +" ++++++");
+		System.out.println("\n++++++ "+ this.getNombre() + " VS " + enemigo.getNombre() +" ++++++");
 		int cantidadDeGolpesAtacante = cantidadGolpes(enemigo);
 		if(cantidadDeGolpesAtacante < 1) cantidadDeGolpesAtacante = 2;
 		int cantidadDeGolpesDefensor = enemigo.cantidadGolpes(this);
 		
-		while(cantidadDeGolpesAtacante != cantidadDeGolpesDefensor) {
+		while(!(cantidadDeGolpesDefensor == 0 && cantidadDeGolpesAtacante == 0)) {
 			if(cantidadDeGolpesAtacante > 0) {
 				cantidadDeGolpesAtacante--;
 				enemigo.takeDamage(calculatorDamage(enemigo), this);
@@ -28,7 +29,7 @@ public class Personaje {
 			if(cantidadDeGolpesDefensor > 0) {
 				cantidadDeGolpesDefensor--;
 				takeDamage(enemigo.calculatorDamage(this), enemigo);
-			}
+			}	
 		}
 		System.out.println("------FIN DE LA BATALLA------");				
 	}
@@ -62,39 +63,35 @@ public class Personaje {
 		return vida;
 	}
 
-	public void setVida(int vida) {
+    private void setVida(int vida) {
 		this.vida = vida;
 	}
 
 	public int getAtaque() {
 		return ataque;
 	}
-
-	public void setAtaque(int ataque) {
+	private void setAtaque(int ataque) {
 		this.ataque = ataque;
 	}
 
 	public int getDefensa() {
 		return defensa;
 	}
-
-	public void setDefensa(int defensa) {
+	private void setDefensa(int defensa) {
 		this.defensa = defensa;
 	}
 
 	public int getVelocidad() {
 		return velocidad;
 	}
-
-	public void setVelocidad(int velocidad) {
+	private void setVelocidad(int velocidad) {
 		this.velocidad = velocidad;
 	}
 
 	public String getNombre() {
 		return nombre;
 	}
-
-	public void setNombre(String nombre) {
+	private void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
