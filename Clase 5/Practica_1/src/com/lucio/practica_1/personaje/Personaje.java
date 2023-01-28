@@ -1,18 +1,15 @@
 package com.lucio.practica_1.personaje;
 
-import java.util.Iterator;
-
-
 public class Personaje {
 	private int vida, ataque, defensa, velocidad;
 	private String nombre;
 	
 	public Personaje(int vida, int ataque, int defensa, int velocidad, String nombre) {
-		this.vida = vida;
-		this.ataque = ataque;
-		this.defensa = defensa;
-		this.velocidad = velocidad;
-		this.nombre = nombre;
+		this.setVida(vida);
+		this.setAtaque(ataque);
+		this.setDefensa(defensa);
+		this.setVelocidad(velocidad);
+		this.setNombre(nombre);
 	}
 	
 	public void luchar(Personaje enemigo) {
@@ -48,7 +45,7 @@ public class Personaje {
 	
 	private int calculatorDamage(Personaje enemigo) {
 		int damage = this.getAtaque() -enemigo.getDefensa();
-		damage += ((int) (Math.random() * enemigo.getDefensa()/4) - (enemigo.getDefensa()/8));
+		damage += ((int) (Math.random() * enemigo.getDefensa()/2) - (enemigo.getDefensa()/4));
 		if (damage > 0) damage = 0;
 		return damage;
 	}

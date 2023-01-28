@@ -1,7 +1,6 @@
 import com.lucio.practica_1.personaje.Elfo;
 import com.lucio.practica_1.personaje.Humano;
 import com.lucio.practica_1.personaje.Orco;
-import com.lucio.practica_1.personaje.Personaje;
 
 
 public class main {
