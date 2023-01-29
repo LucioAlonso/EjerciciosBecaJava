@@ -1,17 +1,23 @@
 package com.lucio.practica_2.personaje;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import com.lucio.practica_2.artefacto.Artefacto;
+import com.lucio.practica_2.artefacto.Mundo;
 import com.lucio.practica_2.artefacto_arma.Arma;
-import com.lucio.practica_2.artefacto_arma.Escudo;
 import com.lucio.practica_2.artefacto_armadura.Armadura;
 import com.lucio.practica_2.artefacto_armadura.Botas;
 import com.lucio.practica_2.artefacto_armadura.Casco;
+import com.lucio.practica_2.artefacto_armadura.Escudo;
 import com.lucio.practica_2.artefacto_armadura.Pantalon;
 import com.lucio.practica_2.artefacto_armadura.Pechera;
 import com.lucio.practica_2.artefacto_consumible.Consumible;
 
 public class Personaje {
-	private int vida, ataque, defensa, velocidad, hambre;
+	private int vida, ataque, defensa, velocidad, vidaInicial;
 	private String nombre;
 	private Artefacto [] inventario = new Artefacto[5];
 	private Casco slotCasco = null;
@@ -20,6 +26,7 @@ public class Personaje {
 	private Botas slotBotas = null;
 	private Arma slotArma = null;
 	private Escudo slotEscudo = null;
+
 	
 	public Personaje(int vida, int ataque, int defensa, int velocidad, String nombre) {
 		this.setVida(vida);
@@ -27,7 +34,17 @@ public class Personaje {
 		this.setDefensa(defensa);
 		this.setVelocidad(velocidad);
 		this.setNombre(nombre);
-		this.hambre = 100;
+	}
+	
+	public void guardarPersonaje(){
+		try(OutputStreamWriter oew=new OutputStreamWriter(new FileOutputStream("D:\\"+this.getNombre()+".txt"))) {
+			oew.write(this.toString() + "\n" + this.toStringInventario());
+			oew.close();
+		} 
+		catch (IOException e) {
+			System.out.println("Error al guardar");
+		}
+
 	}
 	
 	public void luchar(Personaje enemigo) {
@@ -37,25 +54,32 @@ public class Personaje {
 		int cantidadDeGolpesDefensor = enemigo.cantidadGolpes(this);
 		
 		while(!(cantidadDeGolpesDefensor == 0 && cantidadDeGolpesAtacante == 0)) {
-			if(cantidadDeGolpesAtacante > 0 && this.getHambre() > 0) {
+			if(cantidadDeGolpesAtacante > 0) {
 				cantidadDeGolpesAtacante--;
 				enemigo.takeDamage(calculatorDamage(enemigo), this);
-				setHambre(getHambre()-5);
 			}
-			if(cantidadDeGolpesDefensor > 0 && enemigo.getHambre() > 0) {
+			if(cantidadDeGolpesDefensor > 0) {
 				cantidadDeGolpesDefensor--;
 				takeDamage(enemigo.calculatorDamage(this), enemigo);
-				enemigo.setHambre(getHambre()-5);
 			}	
 		}
 		System.out.println("------FIN DE LA BATALLA------");				
 	}
 	
-	public Arma getSlotArma() {
+	public void desequipar(int slot) {
+		if (slot == Mundo.ARMA && this.getSlotArma() != null) removeArma(); 
+		else if (slot == Mundo.ESCUDO && this.getSlotEscudo() != null) removeEscudo();
+		else if (slot == Mundo.CASCO  && this.getSlotCasco() != null) removeCasco();
+		else if (slot == Mundo.PECHERA && this.getSlotPechera() != null) removePechera();
+		else if (slot == Mundo.PANTALON && this.getSlotPantalon() != null) removePantalon();
+		else if (slot == Mundo.BOTAS && this.getSlotBotas() != null) removeBotas();
+	}
+	
+	private Arma getSlotArma() {
 		return slotArma;
 	}
 	
-	public void removeArma() {
+	private void removeArma() {
 		agarrar(this.getSlotArma());
 		this.setAtaque(this.getAtaque() - slotArma.getAtaque());
 		this.setVelocidad(this.getVelocidad() - slotArma.getVelocidad());
@@ -63,7 +87,7 @@ public class Personaje {
 	}
 
 
-	public void setSlotArma(Arma slotArmaDistancia) {
+	private void setSlotArma(Arma slotArmaDistancia) {
 		if(getSlotArma() == null) {
 			this.slotArma = slotArmaDistancia;
 			this.setAtaque(this.getAtaque() + slotArma.getAtaque());
@@ -73,86 +97,110 @@ public class Personaje {
 	}
 
 
-	public Escudo getSlotEscudo() {
+	private Escudo getSlotEscudo() {
 		return slotEscudo;
 	}
 
-	public void setSlotEscudo(Escudo slotEscudo) {
-		if(getSlotEscudo() == null) this.slotEscudo = slotEscudo;
+	private void setSlotEscudo(Escudo slotEscudo) {
+		if(getSlotEscudo() == null) {
+			this.slotEscudo = slotEscudo;
+			slotEscudo.colocarAtributos(this); 
+		}
 		else System.out.println("No se puede realizar esta accion.");
 	}
 
-	public void removeEscudo() {
+	private void removeEscudo() {
 		agarrar(this.getSlotEscudo());
 		this.slotEscudo = null;
+		this.getSlotEscudo().quitarAtributos(this);
 	}
 	
-	public Casco getSlotCasco() {
+	private Casco getSlotCasco() {
 		return slotCasco;
 	}
 
-	public void setSlotCasco(Casco slotCasco) {
-		if(getSlotCasco() == null) this.slotCasco = slotCasco;
+	private void setSlotCasco(Casco slotCasco) {
+		if(getSlotCasco() == null) {
+			this.slotCasco = slotCasco;
+			slotCasco.colocarAtributos(this); 
+		}
 		else System.out.println("No se puede realizar esta accion.");
 	}
 	
-	public void removeCasco() {
+	private void removeCasco() {
 		agarrar(this.getSlotCasco());
 		this.slotCasco = null;
+		this.getSlotCasco().quitarAtributos(this);
 	}
 
-	public Pechera getSlotPechera() {
+	private Pechera getSlotPechera() {
 		return slotPechera;
 	}
 	
-	public void removePechera() {
+	private void removePechera() {
 		agarrar(this.getSlotPechera());
 		this.slotPechera = null;
+		this.getSlotPechera().quitarAtributos(this);
 	}
 
-	public void setSlotPechera(Pechera slotPechera) {
-		if(getSlotPechera() == null)  this.slotPechera = slotPechera;
+	private void setSlotPechera(Pechera slotPechera) {
+		if(getSlotPechera() == null) {
+			this.slotPechera = slotPechera;
+			slotPechera.colocarAtributos(this); 
+		}
 		else System.out.println("No se puede realizar esta accion.");
 	}
 
-	public Pantalon getSlotPantalon() {
+	private Pantalon getSlotPantalon() {
 		return slotPantalon;
 	}
 	
-	public void removePantalon() {
+	private void removePantalon() {
 		agarrar(this.getSlotPantalon());
 		this.slotPantalon = null;
+		this.getSlotPantalon().quitarAtributos(this);
 	}
 
-	public void setSlotPantalon(Pantalon slotPantalon) {
-		if(getSlotPantalon() == null) this.slotPantalon = slotPantalon;
+	private void setSlotPantalon(Pantalon slotPantalon) {
+		if(getSlotPantalon() == null) {
+			this.slotPantalon = slotPantalon;
+			slotPantalon.colocarAtributos(this);
+		}
 		else System.out.println("No se puede realizar esta accion.");
 	}
 
-	public Botas getSlotBotas() {
+	private Botas getSlotBotas() {
 		return slotBotas;
 	}
 
-	public void removeBotas() {
+	private void removeBotas() {
 		agarrar(this.getSlotBotas());
 		this.slotBotas = null;
+		this.getSlotBotas().quitarAtributos(this);
 	}
 	
-	public void setSlotBotas(Botas slotBotas) {
-		if(getSlotBotas() == null)  this.slotBotas = slotBotas;
+	private void setSlotBotas(Botas slotBotas) {
+		if(getSlotBotas() == null) {
+			this.slotBotas = slotBotas;
+			slotBotas.colocarAtributos(this);
+		}
 		else System.out.println("No se puede realizar esta accion.");
 	}
 
-	public int getHambre() {
-		return hambre;
+	public void agarrar(int slotMundo) {
+		Artefacto obj = Mundo.tomarItemDelSuelo(slotMundo);
+		if(obj == null) return; 
+		for(int i=0; i<inventario.length; i++) {
+			if(inventario[i] == null) {
+				inventario[i] = obj;
+				return;
+			}
+		}
+		this.soltar(obj);
 	}
-
-	public void setHambre(int hambre) {
-		this.hambre = hambre;
-	}
-
-	public void agarrar(Artefacto obj) {
-		if(obj == null) return;
+	
+	private void agarrar(Artefacto obj) {
+		if(obj == null) return; 
 		for(int i=0; i<inventario.length; i++) {
 			if(inventario[i] == null) {
 				inventario[i] = obj;
@@ -168,18 +216,17 @@ public class Personaje {
 		return tirar;
 	}
 	
-	public Artefacto soltar(Artefacto obj) { //no voy a aplicar la logica para que el objeto vuelva a al array de items en el suelo.
-		Artefacto tirar = obj;
+	private void soltar(Artefacto obj) { //no voy a aplicar la logica para que el objeto vuelva a al array de items en el suelo.
+		Mundo.agregarItemMundo(obj);
 		obj = null;
-		return tirar;
 	}
 
-	
+
 	public void usar(int invSlot) {
 		if(inventario[invSlot] == null) return;
 		
 		if(inventario[invSlot] instanceof Consumible) {
-			((Consumible) inventario[invSlot]).consumir();
+			((Consumible) inventario[invSlot]).consumir(this);
 			inventario[invSlot] = null;
 			
 		} else if (inventario[invSlot] instanceof Armadura) {
@@ -199,7 +246,7 @@ public class Personaje {
 			}
 			
 		} else if (inventario[invSlot] instanceof Arma) {
-			
+
 			if(inventario[invSlot] instanceof Escudo) {
 				this.setSlotEscudo((Escudo)inventario[invSlot]);
 				inventario[invSlot] = null;
@@ -212,10 +259,11 @@ public class Personaje {
 			System.out.println("El objeto que tiene en la mano no tiene acciones.");
 		}
 	}
+
 	
 	public void takeDamage(int damage, Personaje enemigo) {
 		if (enemigo.getDefensa() > 0 && enemigo.getDefensa() > damage) {
-			this.setDefensa(this.getDefensa() - damage);
+			this.setDefensa(this.getDefensa() - damage); 
 		} else this.setVida(this.getVida() - damage);
 		consoleMSG(damage,enemigo);
 		System.out.println("");
@@ -245,59 +293,71 @@ public class Personaje {
 		return vida;
 	}
 
-    protected void setVida(int vida) {
+    public void setVida(int vida) {
 		this.vida = vida;
 	}
 
 	public int getAtaque() {
 		return ataque;
 	}
-	protected void setAtaque(int ataque) {
+	public void setAtaque(int ataque) {
 		this.ataque = ataque;
 	}
 
 	public int getDefensa() {
 		return defensa;
 	}
-	protected void setDefensa(int defensa) {
+	public void setDefensa(int defensa) {
 		this.defensa = defensa;
 	}
 
 	public int getVelocidad() {
 		return velocidad;
 	}
-	protected void setVelocidad(int velocidad) {
+	public void setVelocidad(int velocidad) {
 		this.velocidad = velocidad;
 	}
 
 	public String getNombre() {
 		return nombre;
 	}
-	protected void setNombre(String nombre) {
+	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	public int getVidaInicial() {
+		return this.vidaInicial;
+	}
+	
 	@Override
 	public String toString() {
 		return "Personaje [vida=" + vida + ", ataque=" + ataque + ", defensa=" + defensa + ", velocidad=" + velocidad
-				+ ", nombre=" + nombre + "]";
+				+ ", nombre=" + nombre +"]";
 	}
 	
 	public String verInventario() {
-		StringBuilder str = new StringBuilder();
-		for (int i = 0; i<inventario.length; i++) {
-			if(inventario[i] != null) str.append("[" + (i+1) + "] " + inventario[i].toString() + "\n");
+		for (Artefacto artefacto : inventario) {
+			if(artefacto != null) {
+				return ("\n============================================================================================================================================================================================"+
+						"\nInventario de "+ this.getNombre() + "\n" +
+						Mundo.visorDeInventarios(inventario));		
+			}
 		}
+		return "- "+ this.getNombre()+" no tiene items en el inventario.";
+	}
+	
+	public String toStringInventario() {
+		StringBuilder str = new StringBuilder();
+		if(this.getSlotArma() != null) str.append("[" + this.getSlotArma().toString() + "]\n");
+		if(this.getSlotEscudo() != null) str.append("[" + this.getSlotEscudo().toString() + "]\n");
+		if(this.getSlotCasco() != null) str.append("[" + this.getSlotCasco().toString() + "]\n");
+		if(this.getSlotPechera() != null) str.append("[" + this.getSlotPechera().toString() + "]\n");
+		if(this.getSlotPantalon() != null) str.append("[" + this.getSlotPantalon().toString() + "]\n");
+		if(this.getSlotBotas() != null) str.append("[" + this.getSlotBotas().toString() + "\n");
 		
-		if (this.getSlotCasco() != null) str.append("[Casco]: " + this.getSlotCasco() + "\n");
-		if (this.getSlotPechera() != null) str.append("[Pechera]: " + this.getSlotPechera() + "\n");
-		if (this.getSlotPantalon() != null) str.append("[Pantalones]: " + this.getSlotPantalon() + "\n");
-		if (this.getSlotBotas() != null) str.append("[Botas]: " + this.getSlotBotas() + "\n");
-		if (this.getSlotEscudo() != null) str.append("[Escudo]: " + this.getSlotEscudo() + "\n");
-		if (this.getSlotArma() != null) str.append("[Arma]: " + this.getSlotArma() + "\n");
-		
-		
-		if(str.length() == 0) return "El inventario de " + this.getNombre() + " esta vacio.";
+		for (Artefacto artefacto : inventario) {
+			if(artefacto != null)str.append(artefacto.toString() + "\n");
+		}
 		return str.toString();
 	}
 		

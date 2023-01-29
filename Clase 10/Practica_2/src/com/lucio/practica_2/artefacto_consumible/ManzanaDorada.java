@@ -2,6 +2,7 @@ package com.lucio.practica_2.artefacto_consumible;
 
 import com.lucio.practica_2.interfaz_artefacto_consumible.IComida;
 import com.lucio.practica_2.interfaz_artefacto_consumible.IPocion;
+import com.lucio.practica_2.personaje.Personaje;
 
 public class ManzanaDorada extends Consumible implements IPocion, IComida{
 
@@ -14,24 +15,20 @@ public class ManzanaDorada extends Consumible implements IPocion, IComida{
 	}
 
 	@Override
-	public void consumir() {
-		// TODO Auto-generated method stub
-		
+	public void consumir(Personaje personaje) {
+		saciarHambre(personaje);
+		efecto(personaje);
 	}
 
 	@Override
-	public void saciarHambre() {
-		// TODO Auto-generated method stub
-		
+	public void saciarHambre(Personaje personaje) {
+		System.out.println("Comiendo " + this.getNombre() + "...");
 	}
 
 	@Override
-	public void efecto() {
-		// TODO Auto-generated method stub
-		
+	public void efecto(Personaje personaje) {
+		System.out.println(personaje.getNombre() + " esta regenerando se salud... ");			
+		if(personaje.getVidaInicial() > personaje.getVida() + curacion) personaje.setVida(personaje.getVida() + curacion);
 	}
-
-	
-	
 
 }

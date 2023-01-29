@@ -9,14 +9,7 @@ public class Botas extends Armadura implements IBotas{
 	}
 	
 	public Botas(String nombre, int defensa , int vida) {
-		super(nombre, vida, 0, defensa, 0);
+		super(nombre, vida, 0, defensa, 0); 
 	}
-
-	@Override
-	public void mitigarDaño() {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }

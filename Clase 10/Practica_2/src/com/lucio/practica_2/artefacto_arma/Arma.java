@@ -7,6 +7,6 @@ public abstract class Arma extends Artefacto implements IArma{
 
 	public Arma(String nombre, int vida, int ataque, int defensa, int velocidad) {
 		super(nombre, vida, ataque, defensa, velocidad);
-	}	
+	}	 
 
 }

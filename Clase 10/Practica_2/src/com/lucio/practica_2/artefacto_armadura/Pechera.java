@@ -12,12 +12,4 @@ public class Pechera extends Armadura implements IPechera{
 		super(nombre, vida, 0, defensa, 0);
 	}
 
-	@Override
-	public void mitigarDaño() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

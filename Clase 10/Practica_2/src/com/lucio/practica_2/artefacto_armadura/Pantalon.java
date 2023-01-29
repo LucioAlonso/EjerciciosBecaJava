@@ -12,12 +12,4 @@ public class Pantalon extends Armadura implements IPantalon{
 		super(nombre, vida, 0, defensa, 0);
 	}
 
-	@Override
-	public void mitigarDaño() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

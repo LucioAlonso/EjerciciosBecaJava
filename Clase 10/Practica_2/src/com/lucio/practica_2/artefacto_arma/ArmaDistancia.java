@@ -5,6 +5,7 @@ import com.lucio.practica_2.personaje.Personaje;
 
 public class ArmaDistancia extends Arma implements ILargaDistancia{
 
+	
 	public ArmaDistancia(String nombre, int ataque, int defensa, int vida) {
 		super(nombre, vida, ataque, defensa, 0);
 	}	
@@ -18,11 +19,13 @@ public class ArmaDistancia extends Arma implements ILargaDistancia{
 	}		
 
 	@Override
+	public void accion() {
+		recargar();
+	} 
+	
+	@Override
 	public void recargar() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Recargando " + this.getNombre() + "...");
 	}
-
-
 	
 }

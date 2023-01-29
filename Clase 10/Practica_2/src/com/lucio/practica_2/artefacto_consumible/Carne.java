@@ -1,6 +1,7 @@
 package com.lucio.practica_2.artefacto_consumible;
 
 import com.lucio.practica_2.interfaz_artefacto_consumible.IComida;
+import com.lucio.practica_2.personaje.Personaje;
 
 public class Carne extends Consumible implements IComida{
 
@@ -11,15 +12,13 @@ public class Carne extends Consumible implements IComida{
 	}
 
 	@Override
-	public void consumir() {
-		// TODO Auto-generated method stub
-		
+	public void consumir(Personaje personaje) {
+		saciarHambre(personaje);
 	}
 
 	@Override
-	public void saciarHambre() {
-		// TODO Auto-generated method stub
-		
+	public void saciarHambre(Personaje personaje) {
+		System.out.println(personaje.getNombre() +" esta comiendo " + this.getNombre() + "...");
 	}
 
 

@@ -4,7 +4,7 @@ import com.lucio.practica_2.interfaz_artefacto_arma.ICortaDistancia;
 import com.lucio.practica_2.personaje.Personaje;
 
 public class ArmaMele extends Arma implements ICortaDistancia{
-
+	
 	public ArmaMele(String nombre, int ataque, int defensa, int vida) {
 		super(nombre, vida, ataque, defensa, 0);
 	}	
@@ -18,10 +18,15 @@ public class ArmaMele extends Arma implements ICortaDistancia{
 	}
 
 	@Override
-	public void reparar() {
-		// TODO Auto-generated method stub
-		
+	public void accion() {
+		reparar();		
 	}
+	
+	@Override
+	public void reparar() {
+		System.out.println("Reparando " + this.getNombre() + "...");
+	}
+
 
 
 }

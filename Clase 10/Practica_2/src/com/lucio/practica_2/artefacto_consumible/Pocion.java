@@ -1,6 +1,7 @@
 package com.lucio.practica_2.artefacto_consumible;
 
 import com.lucio.practica_2.interfaz_artefacto_consumible.IPocion;
+import com.lucio.practica_2.personaje.Personaje;
 
 public class Pocion extends Consumible implements IPocion{
 
@@ -12,15 +13,15 @@ public class Pocion extends Consumible implements IPocion{
 	}
 
 	@Override
-	public void consumir() {
-		// TODO Auto-generated method stub
+	public void consumir(Personaje personaje) {
+		efecto(personaje);
 		
 	}
 
 	@Override
-	public void efecto() {
-		// TODO Auto-generated method stub
-		
+	public void efecto(Personaje personaje) {
+		System.out.println(personaje.getNombre() + " esta tomando una " + this.getNombre() + "...");
+		if(personaje.getVidaInicial() > personaje.getVida() + curacion) personaje.setVida(personaje.getVida() + curacion);
 	}
 
 }
